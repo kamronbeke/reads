@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+<h1>Login</h1>
+ <p> Username  va  parolingizni  kiriting </p>
+       <form method="post", action="{% url 'login' %}">
+            {%  csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">KIRISH</button>
+        </form>
+
+</body>
+</html>
