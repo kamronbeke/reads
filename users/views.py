@@ -1,60 +1,56 @@
+from django.contrib.auth import login
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.views import View
-from django.contrib.auth.models import User
-
-from users.forms import RegisterForm, LoginForm
+from users.forms import UserCreateForm, UserLoginForm
 
 
-class UserCreateView(View):
+class RegisterView(View):
     def get(self, request):
-
-        register_form = RegisterForm()
+        create_user = UserCreateForm()
 
         context = {
-            'form': register_form
+            'form':create_user
         }
-
-        return render(request, template_name='register.html', context=context)
-
+        return render(request=request, template_name='users/register.html', context=context)
 
     def post(self, request):
-        create_form = RegisterForm(data= request.POST)
+        create_form = UserCreateForm(data=request.POST)
 
         if create_form.is_valid():
-
             create_form.save()
-            return redirect("users:login")
-
-
-        # username = request.POST['username']
-        # first_name =request.POST['first_name']
-        # last_name =request.POST['last_name']
-        # email =request.POST['email']
-        # password =request.POST['password']
-        #
-        # user = User.objects.create_user(
-        #                          username = username,
-        #                          first_name = first_name,
-        #                          last_name = last_name,
-        #                          email = email,
-        # #                          )
-        # user.save()
-        # user.set_password(password)
-        #
-        # print(username, first_name, email ,last_name, password)
-
+            return redirect('users:login')
         else:
             context = {
                 'form': create_form
             }
+            return render(request=request, template_name='users/register.html', context=context)
 
-        return render(request, template_name='register.html', context=context)
 
-class UserLoginView(View):
+class LoginView(View):
     def get(self, request):
-        login_form = LoginForm()
+        login_form = AuthenticationForm()
 
-        context = {
-            'form': login_form
-        }
-        return render(request, template_name='login.html', context=context)
+        return render(request=request, template_name='users/login.html',context= {'form' : login_form})
+
+    def post(self, request):
+
+        login_form = AuthenticationForm(data=request.POST)
+        if login_form.is_valid():
+            user = login_form.get_user()
+            login(request, user)
+
+
+            return redirect('landing_page')
+        else:
+            return render(request=request, template_name='users/login.html',context= {'form' : login_form})
+
+
+
+
+
+class ProfileView(LoginRequiredMixin,View):
+    def get(self, request):
+        return render(request, 'users/profile.html', {'user': request.user})

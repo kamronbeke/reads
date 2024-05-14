@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import BookModel, Author, BookAuthor, BookReview
+from .models import Book, Author, BookAuthor, BookReview
 
 
 class BookAdmin(admin.ModelAdmin):
@@ -19,7 +19,7 @@ class BookAuthorAdmin(admin.ModelAdmin):
     list_filter = ['author']
 
 
-admin.site.register(BookModel, BookAdmin),
+admin.site.register(Book, BookAdmin),
 admin.site.register(Author),
 admin.site.register(BookAuthor),
 admin.site.register(BookReview),

@@ -7,11 +7,10 @@
 <body>
 <h1>Login</h1>
  <p> Username  va  parolingizni  kiriting </p>
-       <form method="post", action="{% url 'login' %}">
+       <form method="post", action="{% url 'users:login' %}">
             {%  csrf_token %}
             {{ form.as_p }}
-            <button type="submit">KIRISH</button>
+            <button type="submit">Kirish</button>
         </form>
-
 </body>
 </html>

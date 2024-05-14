@@ -5,11 +5,22 @@
     <title>Landing page</title>
 </head>
 <body>
-<h1> landing page</h1>
+
+
+{% if messages %}
+    {% for message in messages %}
+        <span class="{{ message.tags }}">{{ message }}</span>
+    {% endfor %}
+{% endif %}
+
+<h1>Landing page</h1>
 
 <p>
-    <a href="{% url 'register' %}">register</a> / <a href="{% url 'login' %}">login</a>
-</p>
 
+    <a href="{% url 'books:list' %}">Books</a>
+   / <a href="{% url 'users:profile' %}">Profile</a>
+    / <a href="{% url 'users:register' %}">Register</a>
+        / <a href="{% url 'users:login' %}">Login</a>
+</p>
 </body>
 </html>
