@@ -4,13 +4,17 @@
 
 
 {% block content %}
-<h1>Ro'yhatdan o'tish oynasi</h1>
+{% load crispy_forms_tags %}
 
-<form method="post" action="{% url 'users:register' %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit"> yuborish </button><br><br>
 
-</form>
+<h3>Register page</h3>
+<div class="row">
+    <div class="col-4">
+        <form method="post" action="{% url 'users:register' %}">{% csrf_token %}
+            {{ form | crispy }}
+            <button type="submit" class="btn btn-primary"> Yuborish </button>
+        </form>
+    </div>
+</div>
 
 {% endblock content %}

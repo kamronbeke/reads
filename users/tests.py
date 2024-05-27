@@ -1,6 +1,6 @@
 
 from django.contrib.auth import get_user
-from django.contrib.auth.models import User
+from .models import CustomUser
 from django.test import TestCase
 from django.urls import reverse
 
@@ -19,7 +19,7 @@ class TestRegistration(TestCase):
             }
 
         )
-        user = User.objects.get(username= 'ali')
+        user = CustomUser.objects.get(username= 'ali')
 
         self.assertEqual(user.first_name, 'aliyev')
         self.assertEqual(user.last_name, 'valiyev')
@@ -35,7 +35,7 @@ class TestRegistration(TestCase):
                 'password': '<PASSWORD>',
             }
         )
-        user_count = User.objects.count()
+        user_count = CustomUser.objects.count()
         self.assertEqual(user_count, 0)
         self.assertFormError(response,'form', 'username', 'This field is required.')
         self.assertFormError(response, "form", "password", "This field is required.")
@@ -52,7 +52,7 @@ class TestRegistration(TestCase):
                 'password':'password1'
             }
         )
-        user_count = User.objects.count()
+        user_count = CustomUser.objects.count()
         self.assertEqual(user_count, 0)
         self.assertFormError(response, 'form', 'email', 'Enter a valid email address.')
 
@@ -67,13 +67,13 @@ class TestRegistration(TestCase):
                 'password': '$$$^&&*&%%$$%'
             }
         )
-        user_count = User.objects.count()
+        user_count = CustomUser.objects.count()
         self.assertEqual(user_count, 0)
         self.assertFormError(response, 'form', 'password', 'Enter a valid password.')
 
 class LoginTest(TestCase):
     def test_success_login(self):
-        db_user =  User.objects.create(username = 'ali', first_name = 'aliyev')
+        db_user =  CustomUser.objects.create(username = 'ali', first_name = 'aliyev')
         db_user.set_password('password1')
         db_user.save()
 
@@ -90,7 +90,7 @@ class LoginTest(TestCase):
 
 
     def test_wrong_login(self):
-        db_user = User.objects.create(username='ali', first_name='aliyev')
+        db_user = CustomUser.objects.create(username='ali', first_name='aliyev')
         db_user.set_password('password1')
         db_user.save()
 
@@ -131,7 +131,7 @@ class ProfileTestCase(TestCase):
         self.assertEqual(response.url, reverse("users:login") + '?next=/users/profile/')
 
     def test_profile_detail(self):
-        user = User.objects.create(username="ali",
+        user = CustomUser.objects.create(username="ali",
                                     first_name="aliyev",
                                     last_name="valiyev",
                                     email="ali008@gmail.com")

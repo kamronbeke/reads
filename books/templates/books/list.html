@@ -1,28 +1,24 @@
-{% extends "base.html" %}
-
-{% block title %} {{ book.title }} {% endblock %}
+{% extends 'base.html' %}
+{% block title %} Book list page {% endblock %}
+{% load static %}
 
 {% block content %}
+    <h3>Books</h3>
 
-{% if messages %}
-    {% for message in messages %}
-        <span class="{{ message.tags }}">{{ message }}</span>
-    {% endfor %}
-{% endif %}
-
-<h1>Books</h1>
-
-{% if books_id %}
-    <ul>
+{% if books %}
         {% for book in books %}
-            <li>
-                <a href="{% url 'books:detail' book.id %}">{{ book.title }}</a>
-            </li>
-            <br>
+            <div class="row mb-4">
+                <div class="col-2">
+                    <img class="cover-pic" src="{{ book.cover_picture.url }}" alt="{{ user.username }}">
+                </div>
+                <div class="col-6 ms-4">
+                    <h4><a href="{% url 'books:detail' book.id %}">{{ book.title }}</a></h4>
+                    <p>{{ book.description }}</p>
+                </div>
+            </div>
         {% endfor %}
-    </ul>
+
 {% else %}
     No books found.
 {% endif %}
-
-{% endblock content %}
+{% endblock content%}

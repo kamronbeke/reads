@@ -2,10 +2,11 @@ from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
+from .models import CustomUser
 from django.shortcuts import render, redirect
 from django.views import View
-from users.forms import UserCreateForm, UserLoginForm
+from users.forms import UserCreateForm, UserLoginForm, UpdateProfileForm
+
 
 
 class RegisterView(View):
@@ -64,3 +65,21 @@ class LogoutView(LoginRequiredMixin, View):
         logout(request)
         messages.info(request, 'You have been logged out.')
         return redirect('landing_page')
+
+
+class UpdateProfileView(LoginRequiredMixin, View):
+    def get(self, request):
+        userform = UpdateProfileForm(instance=request.user)
+
+        return render(request, 'users/profile_update.html', {'form': userform})
+
+    def post(self, request):
+        user = UpdateProfileForm(instance=request.user,
+                                 data=request.POST,
+                                 files=request.FILES
+                                 )
+        if user.is_valid():
+            user.save()
+            messages.success(request, "O'zgarishlar saqlandi")
+            return redirect('users:profile')
+        return render(request, 'users/profile_update.html', {'form': user})

@@ -1,4 +1,5 @@
-from django.contrib.auth.models import User
+# from users.models import CustomUser
+from users.models import CustomUser
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
@@ -8,6 +9,7 @@ class Book(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     isbn = models.CharField(max_length=17)
+    cover_picture = models.ImageField(default='default_cover_picture.jpg')
 
 
     def __str__(self):
@@ -32,7 +34,7 @@ class BookAuthor(models.Model):
 
 
 class BookReview(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     comment = models.TextField()
     stars_given = models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(5)])
