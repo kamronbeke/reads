@@ -23,10 +23,13 @@
 
 
       </ul>
-<!--      <form class="d-flex" role="search">-->
-<!--        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">-->
-<!--        <button class="btn btn-outline-success" type="submit">Search</button>-->
-<!--      </form>-->
+        <div class="me-3">
+     <form class="d-flex" role="search">
+    <input class="form-control me-2" type="search" placeholder="Search" name="q" aria-label="Search">
+    <button class="btn btn-outline-secondary" type="submit">Search</button>
+    </form>
+
+        </div>
 
         {% if request.user.is_authenticated %}
         <div class="me-5">
@@ -35,7 +38,7 @@
             <i class="fa-regular "> {{ request.user.username }}</i>
           </button>
           <ul class="dropdown-menu">
-            <li><a class="btn btn-outline" href="{% url 'users:profile' %}"><img  class="profile-pic"  alt="{{ user.username }}"> Profile</a></li>
+            <li><a class="btn btn-outline" href="{% url 'users:profile' %}"><img  alt=""> <i class="fa-solid fa-user"></i> Profile</a></li>
               <li><hr class="dropdown-divider"></li>
             <li><a class="btn btn-outline" href="{% url 'users:logout' %}"> <i class="fa-solid fa-right-from-bracket"></i> Log-out</a></li>
           </ul>
