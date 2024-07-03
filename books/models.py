@@ -1,4 +1,5 @@
-# from users.models import CustomUser
+
+
 from users.models import CustomUser
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
@@ -10,6 +11,10 @@ class Book(models.Model):
     description = models.TextField()
     isbn = models.CharField(max_length=17)
     cover_picture = models.ImageField(default='default_cover_picture.jpg')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
 
 
     def __str__(self):
@@ -37,7 +42,9 @@ class BookReview(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     comment = models.TextField()
-    stars_given = models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(5)])
+    stars = models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(5)])
+
 
     def __str__(self):
-        return f'{self.stars_given} for {self.book} by {self.user}'
+        return f'{self.stars} for {self.book} by {self.user}'
+

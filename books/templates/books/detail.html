@@ -1,16 +1,56 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %} {{ book.title }} {% endblock %}
 
-{% block title %} {{ book.title }} {% endblock  %}
+
 {% block content %}
-<div class="row">
-    <div class="col-2 ">
-        <img class="cover-pic" src="{{ book.cover_picture.url }}" alt="">
-    </div>
-    <div class="col-6 ms-3">
-        <h3>{{ book.title }}</h3>
-        <p>{{ book.description }}</p>
+    <div class="row mb-4">
+        <div class="col-2 me-4">
+            <img class="cover-pic" src="{{ book.cover_picture.url }}" alt="{{ book.title }}">
+        </div>
+        <div class="col-6">
+            <h1>{{ book.title }}</h1>
+            {% if book.bookauthor_set.all %}
+                <span class="fst-italic">
+                    Writtent by -
+                    {% for book_author  in book.bookauthor_set.all %}
+                        {% if forloop.last %}
+                            {{ book_author.author }}
+                        {% else %}
+                            {{ book_author.author }},
+                        {% endif %}
+                     {% endfor %}
+                </span>
+            {% endif %}
+            <hr>
+
+            <p>{{ book.description }}</p>
+        </div>
     </div>
 
+<div class="row">
+    <div class="col-6">
+        <form action="{% url 'books:add-review' book.id %}" method="post">
+            {% csrf_token %}
+            {{ form | crispy }}
+            <button class="btn btn-outline-secondary">Add comment</button>
+        </form>
+    </div>
 </div>
+<hr>
+<h4> Izohlar </h4>
+<hr>
+{% for review in comments %}
+        <h4>{{ review.user.username }}</h4>
+    <a href="{% url 'users:user_detail' review.user_id %}"><img style="width: 60px; height: 60px; border-radius: 50%;"
+         src="{{ review.user.profile_picture.url }}" alt="rasm">
+    </a>    <h6>{{ review.comment }}</h6> <br>
+    <a href="{% url 'books:edit_page' book.id  review.id%}"> <i class="bi bi-pen"></i></a>
+    <a href="{% url 'books:delete_review' book.id  review.id %}"> <i class="bi bi-trash"></i></a>
+<hr>
+
+
+{% endfor %}
 
 {% endblock content %}
+                                    

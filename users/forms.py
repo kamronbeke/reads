@@ -1,5 +1,10 @@
 from django import forms
+from django.core.mail import send_mail
+
 from users.models import CustomUser
+
+
+
 
 
 #
@@ -23,13 +28,21 @@ class UserCreateForm(forms.ModelForm):
         user.set_password(self.cleaned_data['password'])
         user.save()
 
-        return user
+        if user.email:
+            send_mail(
+                'Your Goodreads account has been created.',
+                'Welcome to Goodreads clone!',
+                'ikromjon01021995@gmail.com',
+                [user.email],
+            )
+
 
 
 
 class UserLoginForm(forms.Form):
-    username = forms.CharField(max_length=150)
-    password = forms.CharField(max_length=128)
+    class Meta:
+        model = CustomUser
+        fields = ('username','password')
 
 
 
@@ -38,3 +51,4 @@ class UpdateProfileForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ('username', 'first_name', 'last_name', 'email', 'profile_picture')
+

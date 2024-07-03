@@ -1,9 +1,14 @@
 from django.contrib import messages
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, get_user_model
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
+from django.http import HttpResponseForbidden
+from django.urls import reverse_lazy
+from django.views.generic import UpdateView, DeleteView
 from .models import CustomUser
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from users.forms import UserCreateForm, UserLoginForm, UpdateProfileForm
 
@@ -83,3 +88,60 @@ class UpdateProfileView(LoginRequiredMixin, View):
             messages.success(request, "O'zgarishlar saqlandi")
             return redirect('users:profile')
         return render(request, 'users/profile_update.html', {'form': user})
+
+
+
+class UserDetailView(View):
+    user = CustomUser.objects.all()
+    def get(self, request, user_id):
+        user = CustomUser.objects.get(pk=user_id)
+        return render(request, 'users/user_detail.html', {'user': user})
+
+User = get_user_model()
+
+@login_required
+def follow_user(request, user_id):
+    user_to_follow = get_object_or_404(User, id=user_id)
+    if request.user == user_to_follow:
+        return HttpResponseForbidden("You cannot follow yourself.")
+    request.user.follow(user_to_follow)
+    return redirect('users:user_detail', user_id=user_id)
+
+@login_required
+def unfollow_user(request, user_id):
+    user_to_unfollow = get_object_or_404(User, id=user_id)
+    if request.user == user_to_unfollow:
+        return HttpResponseForbidden("You cannot unfollow yourself.")
+    request.user.unfollow(user_to_unfollow)
+    return redirect('users:user_detail', user_id=user_id)
+
+def user_profile(request, user_id):
+    user = get_object_or_404(CustomUser, id=user_id)
+    is_following = request.user.is_following(user) if request.user.is_authenticated else False
+    # is_following = True
+    # print(is_following)
+    return render(request, 'users/user_detail.html', {'user': user, 'is_following': is_following})
+class UserListView(View):
+
+    def get(self, request):
+        user = CustomUser.objects.all()
+        context = {
+            'user':user
+        }
+        search_query = request.GET.get('q')
+        if search_query:
+            users = user.filter(title__icontains=search_query)
+
+            page_size = request.GET.get('page_size', 3)
+            paginator = Paginator(users, page_size)
+
+            page_num = request.GET.get('page', 1)
+            page_obj = paginator.get_page(page_num)
+
+            context = {"page_obj": page_obj}
+            return render(request, 'users/user_list.html', context)
+        return render(request, 'users/users_list.html', context)
+
+
+
+

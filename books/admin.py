@@ -1,3 +1,5 @@
+
+
 from django.contrib import admin
 
 from .models import Book, Author, BookAuthor, BookReview
@@ -23,3 +25,5 @@ admin.site.register(Book, BookAdmin),
 admin.site.register(Author),
 admin.site.register(BookAuthor),
 admin.site.register(BookReview),
+
+
