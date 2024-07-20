@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from . import settings
-from .views import landing_page
+from .views import landing_page, homeview
 
 urlpatterns = [
     path('', landing_page, name = 'landing_page'),
@@ -12,6 +12,8 @@ urlpatterns = [
     path('api/', include('api.urls'), ),
     path('api-auth/', include('rest_framework.urls')),
     path('admin/', admin.site.urls),
+    path('home/', homeview, name='home_page'),
+
 ]
 
 if settings.DEBUG:

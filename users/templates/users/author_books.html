@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ author_name }}ning kitoblari</title>
+</head>
+<body>
+    <h1>{{ author_name }}ning kitoblari</h1>
+    <ul>
+        {% for book in books %}
+            <li>{{ book.title }} - {{ book.publication_year }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

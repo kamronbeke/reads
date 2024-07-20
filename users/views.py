@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView, DeleteView
 from .models import CustomUser
@@ -86,7 +86,7 @@ class UpdateProfileView(LoginRequiredMixin, View):
         if user.is_valid():
             user.save()
             messages.success(request, "O'zgarishlar saqlandi")
-            return redirect('users:profile')
+            return redirect('users:profile_page')
         return render(request, 'users/profile_update.html', {'form': user})
 
 
@@ -139,8 +139,8 @@ class UserListView(View):
             page_obj = paginator.get_page(page_num)
 
             context = {"page_obj": page_obj}
-            return render(request, 'users/user_list.html', context)
-        return render(request, 'users/users_list.html', context)
+            return render(request, 'registration/user_list.html', context)
+        return render(request, 'users/user_list.html', context)
 
 
 

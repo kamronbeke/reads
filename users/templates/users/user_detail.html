@@ -6,7 +6,7 @@
     <div class="mx-5">
         <div class="col-12">
             <h1>Profile page</h1>
-                <img class="profile-pic" src="{{ user.profile_picture.url }}" alt="{{ users.username }}">
+                <img class="profile-pic" src="{{ user.profile_picture.url }}" alt="{{ user.username }}">
             {% if follow_count %}
                 <p>Followers: {{ user.follow_count }}</p>
             {% else %}
@@ -26,7 +26,7 @@
                     {% else %}
                         <form action="{% url 'users:follow_user' user.id %}" method="post">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-primary" >Follow</button>
+                            <button type="submit" class="btn btn-primary">Follow</button>
                         </form>
                     {% endif %}
                 {% endif %}

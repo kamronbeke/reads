@@ -11,7 +11,7 @@ from django.urls import reverse_lazy, reverse
 
 from users.models import CustomUser
 from .forms import CommentForm, EditCommentForm, AddBookForm, AddAuthorForm
-from .models import Book, BookReview
+from .models import Book, BookReview, Author, BookAuthor
 from django.views.generic import View, UpdateView, DeleteView
 from django.core.paginator import Paginator
 from books.models import Book
@@ -47,7 +47,7 @@ class BookDetailView(View):
                    'comments': comments,
                    'form': forms
                    }
-        return render(request, 'books/detail.html', context)
+        return render(request, 'books/detail.html', context=context)
 
 class AddReviewView(LoginRequiredMixin, View):
     def post(self, request, id):
@@ -131,3 +131,15 @@ class AddBookAuthorView(View):
             return redirect('books:list')
 
         return render(request, 'books/add_author.html', {'form':form})
+
+class BookAuthorDetailView(View):
+
+    def get(self, request, author_id):
+        author = Author.objects.get(id=author_id)
+        book = BookAuthor.objects.filter(author=author)
+        print(book)
+        context = {
+            'author': author,
+            'books': book
+        }
+        return render(request, 'books/book_author_detail.html', context)

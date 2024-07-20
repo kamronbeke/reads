@@ -33,7 +33,10 @@
         </li>
           {% endif %}
           {% endif %}
-         <b>  <a class="nav-link {% if request.path == home_page_url %} active  {% endif %} " aria-current="page" href="{{ home_page_url }}"> Home </a> </b>
+         <b>  <a class="nav-link {% if request.path == home_page_url %} active  {% endif %} " aria-current="page" href="{% url 'home_page'  %}"> Home </a> </b>
+          <li>
+         <b>  <a class="nav-link {% if request.path == user_list_url %} active  {% endif %} " aria-current="page" href="{% url 'users:user_list'  %}"> Users </a> </b>
+          </li>
 
 
       </ul>
@@ -85,3 +88,4 @@
 
 </body>
 </html>
+

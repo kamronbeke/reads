@@ -68,9 +68,27 @@
                   <div class="media-body ml-3">
                     {{ review.user.username }}
                     <div class="text-muted small">{{ review.book.created_at | date:"d M Y" }}</div>
+
                   </div>
                 </div>
                   <div>
+                      <div>
+                          {% if request.user.is_authenticated %}
+                            {% if user != request.user %}
+                                {% if is_following %}
+                                    <form action="{% url 'users:unfollow_user' user.id %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">Unfollow</button>
+                                    </form>
+                                {% else %}
+                                    <form action="{% url 'users:follow_user' user.id %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-primary" >Follow</button>
+                                    </form>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                      </div>
                     {{ review.comment }}
                 </div>
 
@@ -79,7 +97,7 @@
             </div>
             {% endfor %}
         </div>
-    </div>             <strong>12</strong> <small class="align-middle">Comments</small>
+    </div>
 
 </div>
 

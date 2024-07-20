@@ -1,7 +1,7 @@
 from django.urls import path
 
-from users.views import follow_user, unfollow_user, ProfileView, RegisterView, LoginView, LogoutView, user_profile, \
-    UserListView, UpdateProfileView
+from users.views import (follow_user, unfollow_user, ProfileView, RegisterView, LoginView, \
+                         LogoutView, user_profile, UserListView, UpdateProfileView)
 
 app_name = 'users'
 
@@ -11,7 +11,7 @@ urlpatterns = [
     path('profile/', ProfileView.as_view(), name='profile_page'),
     path('register/', RegisterView.as_view(), name='register'),
     path('login/', LoginView.as_view(), name='login'),
-    path('logout/', LogoutView.as_view(), name='logout'),
+    path('logout/', LogoutView.as_view(),   name='logout'),
 
 
 

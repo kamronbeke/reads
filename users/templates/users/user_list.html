@@ -9,12 +9,11 @@
         {% for users in user %}
             <div class="row mb-4">
                 <div class="col-2">
-                    <a href="{% url 'users:user_detail' users.pk %}"><img src="{{ users.profile_picture.url }}" style="width: 90px; height: 90px; border-radius: 50%;"></a>
+                    <a href="{% url 'users:user_detail' users.id %}"><img   src="{{ users.profile_picture.url }}" style="width: 90px; height: 90px; border-radius: 50%;"></a>
                     <hr>
                 </div>
                 <div class="col-4 ms-12">
-                    <a href="{% url 'users:user_detail' users.pk %}">{{ users.username }}</a>
-                    <h6>{{ users.first_name }}</h6>
+                    <a href="{% url 'users:user_detail' users.id %}">{{ users.username }}</a>
                 </div>
             </div>
         {% endfor %}
