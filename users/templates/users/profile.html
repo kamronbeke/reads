@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %} profile page {% endblock %}
+{% block content %}
+
+ <div>
+            <div class=" image d-flex flex-column justify-content-center align-items-center">
+                <div class="btn btn-secondary">
+
+                    <img class="profile-pic" src="{{ user.profile_picture.url }}" alt=""><br>
+
+                <span class="idd">Username: {{ user.username }}</span><br>
+                <span class="name mt-3">{{ user.first_name }} {{ user.last_name }}</span><br>
+                <span class="idd">{{ user.email }}</span><br>
+              </div>
+                <div class=" d-flex mt-2">
+                    <a class="btn btn-dark" href="{% url 'users:update' %}">Edit profile</a>
+                </div>
+            </div>
+        </div>
+
+
+
+  {% if user != request.user %}
+    <div>
+      {% if is_following %}
+        <form action="{% url 'unfollow_user' user.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit">Unfollow</button>
+        </form>
+      {% else %}
+        <form action="{% url 'follow_user' user.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit">Follow</button>
+        </form>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <h2>Followers</h2>
+  <ul>
+    {% for follow in user.followers.all %}
+      <li>{{ follow.follower.username }}</li>
+    {% empty %}
+      <li>No followers yet</li>
+    {% endfor %}
+  </ul>
+{% endblock content %}
